@@ -46,3 +46,11 @@ jobs:
         run: pipx install ansible-lint
       - name: Validate Ansible playbook
         run: ansible-lint ansible_iac/setup_env.yml
+
+  compose-validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Docker Compose file
+        working-directory: monitoring
+        run: docker compose config --quiet
