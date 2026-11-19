@@ -1,0 +1,26 @@
+name: Bash Script CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ShellCheck
+        run: shellcheck auth.sh app_calculator.sh
+      - name: Test calculator
+        run: |
+          output=$(./app_calculator.sh 5 10)
+          if [ "$output" != "Сумма: 15" ]; then
+            printf 'Тест провален: %s\n' "$output"
+            exit 1
+          fi
+          echo 'Тест успешно пройден!'
