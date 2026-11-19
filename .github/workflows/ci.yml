@@ -37,3 +37,12 @@ jobs:
           docker run -d -p 127.0.0.1:8080:8080 --name test_app "my-app:${GITHUB_SHA}"
           trap 'docker rm -f test_app >/dev/null' EXIT
           curl --fail --retry 10 --retry-connrefused http://127.0.0.1:8080/
+
+  ansible-lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ansible-lint
+        run: pipx install ansible-lint
+      - name: Validate Ansible playbook
+        run: ansible-lint ansible_iac/setup_env.yml
